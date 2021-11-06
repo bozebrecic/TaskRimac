@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
+using RimacTask.DataAccessLayer;
+using RimacTask.DbContexts;
 using RimacTask.Logic;
 using RimacTask.ViewModels;
 using RimacTask.Views;
@@ -52,6 +55,11 @@ namespace RimacTask
             );
         }
 
+        public static void ConfigureOptionBuilder(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql(_Configuration.GetConnectionString("NetworkNodesDBConnection"));
+        }
+
         public static void ConfigureServices()
         {
             _HostBuilder.ConfigureServices(
@@ -75,7 +83,12 @@ namespace RimacTask
             services.AddTransient<StartWindow>();
             services.AddTransient<OpenFileDialog>();
             services.AddTransient<StartViewModel>();
+            services.AddTransient<DAL>();
+            services.AddTransient<NetworkNodeDataDAL>();
+            services.AddTransient<NetworkNodeDbContext>();
+            services.AddTransient<ModelLogic>();
             services.AddTransient<ParseDbcFileLogic>();
+
         }
 
         private static void SetConfiguration(IConfiguration configuration)
