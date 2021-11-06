@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Win32;
+using RimacTask.Logic;
+using RimacTask.ViewModels;
 using RimacTask.Views;
 using System;
 using System.Collections.Generic;
@@ -30,8 +33,10 @@ namespace RimacTask
 
 
             _ServiceProvider = _ServiceCollection.BuildServiceProvider();
-            StartWindow mainPage = _ServiceProvider.GetRequiredService<StartWindow>();
-            mainPage.Show();
+            StartViewModel startViewModel = _ServiceProvider.GetRequiredService<StartViewModel>();
+
+            StartWindow startWindow = new StartWindow(startViewModel);
+            startWindow.Show();
         }
 
         public static void ConfigureAppConfiguration()
@@ -65,14 +70,12 @@ namespace RimacTask
                 .Build();
         }
 
-        //public static void ConfigureOptionBuilder(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseNpgsql(_Configuration.GetConnectionString("BiographicDbConnection"));
-        //}
-
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<StartWindow>();
+            services.AddTransient<OpenFileDialog>();
+            services.AddTransient<StartViewModel>();
+            services.AddTransient<ParseDbcFileLogic>();
         }
 
         private static void SetConfiguration(IConfiguration configuration)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimacTask.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -19,7 +20,12 @@ namespace RimacTask.Views
     {
         public StartWindow()
         {
+
+        }
+        public StartWindow(StartViewModel startViewModel)
+        {
             InitializeComponent();
+            this.DataContext = startViewModel;
         }
     }
 }
