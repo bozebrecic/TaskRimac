@@ -10,7 +10,7 @@ using RimacTask.DbContexts;
 namespace RimacTask.Migrations
 {
     [DbContext(typeof(NetworkNodeDbContext))]
-    [Migration("20211106192129_InitalMigration")]
+    [Migration("20211107081317_InitalMigration")]
     partial class InitalMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,10 +23,13 @@ namespace RimacTask.Migrations
 
             modelBuilder.Entity("RimacTask.Models.Messages", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TempId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("MesssageId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -34,7 +37,7 @@ namespace RimacTask.Migrations
                     b.Property<int?>("NetworkNodeId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("TempId");
 
                     b.HasIndex("NetworkNodeId");
 
@@ -69,7 +72,7 @@ namespace RimacTask.Migrations
                     b.Property<int>("Length")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("MessageId")
+                    b.Property<int?>("MessageTempId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -77,7 +80,7 @@ namespace RimacTask.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MessageId");
+                    b.HasIndex("MessageTempId");
 
                     b.ToTable("SignalsData");
                 });
@@ -96,7 +99,7 @@ namespace RimacTask.Migrations
                 {
                     b.HasOne("RimacTask.Models.Messages", "Message")
                         .WithMany("Signals")
-                        .HasForeignKey("MessageId")
+                        .HasForeignKey("MessageTempId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Message");

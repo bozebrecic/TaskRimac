@@ -1,6 +1,7 @@
 ﻿using RimacTask.DbContexts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace RimacTask.DataAccessLayer
             _NetworkNodeDbContext = networkNodeDbContext;
         }
 
-        private NetworkNodeDbContext _NetworkNodeDbContext;
+        protected NetworkNodeDbContext _NetworkNodeDbContext { get; set; }
 
         /// <summary>
         /// Method just call DbContext.SaveChanges()
@@ -22,23 +23,24 @@ namespace RimacTask.DataAccessLayer
         public int UpdateDatabase() => _NetworkNodeDbContext.SaveChanges();
 
         /// <summary>
-        /// Method just call DbContext.SaveChangesAsync()
-        /// </summary>
-        /// <returns></returns>
-        public Task<int> UpdateDatabaseAsync() => _NetworkNodeDbContext.SaveChangesAsync();
-
-        /// <summary>
         /// Delete entity from database
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
         public void DeleteEntity<T>(T entity) where T : class => _NetworkNodeDbContext.Remove<T>(entity);
 
+        /// <summary>
+        /// Get all records
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<T> GetAll<T>() where T : class => _NetworkNodeDbContext.Set<T>().ToList();
+
         #region Abtsract methods
 
         public abstract void CreateEntity<T>(T entity) where T : class;
 
-        public abstract T GetByName<T>(string networkNodeName) where T : class;
+        public abstract T GetById<T>(int id) where T : class;
 
         #endregion
     }

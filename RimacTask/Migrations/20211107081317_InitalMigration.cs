@@ -24,14 +24,15 @@ namespace RimacTask.Migrations
                 name: "MessagesData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    TempId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MesssageId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     NetworkNodeId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessagesData", x => x.Id);
+                    table.PrimaryKey("PK_MessagesData", x => x.TempId);
                     table.ForeignKey(
                         name: "FK_MessagesData_NetworkNodeData_NetworkNodeId",
                         column: x => x.NetworkNodeId,
@@ -49,16 +50,16 @@ namespace RimacTask.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     BitStart = table.Column<int>(type: "integer", nullable: false),
                     Length = table.Column<int>(type: "integer", nullable: false),
-                    MessageId = table.Column<int>(type: "integer", nullable: true)
+                    MessageTempId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SignalsData", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SignalsData_MessagesData_MessageId",
-                        column: x => x.MessageId,
+                        name: "FK_SignalsData_MessagesData_MessageTempId",
+                        column: x => x.MessageTempId,
                         principalTable: "MessagesData",
-                        principalColumn: "Id",
+                        principalColumn: "TempId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -68,9 +69,9 @@ namespace RimacTask.Migrations
                 column: "NetworkNodeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SignalsData_MessageId",
+                name: "IX_SignalsData_MessageTempId",
                 table: "SignalsData",
-                column: "MessageId");
+                column: "MessageTempId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

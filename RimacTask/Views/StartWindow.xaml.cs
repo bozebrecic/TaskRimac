@@ -27,5 +27,11 @@ namespace RimacTask.Views
             InitializeComponent();
             this.DataContext = startViewModel;
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Get data from somewhere and fill in my local ArrayList    
+            LoadedDBCFiles.Items.Add("Test");
+        }
     }
 }

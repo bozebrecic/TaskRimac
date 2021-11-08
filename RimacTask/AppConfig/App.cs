@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using RimacTask.DataAccessLayer;
 using RimacTask.DbContexts;
 using RimacTask.Logic;
+using RimacTask.Manager;
 using RimacTask.ViewModels;
 using RimacTask.Views;
 using System;
@@ -83,11 +84,13 @@ namespace RimacTask
             services.AddTransient<StartWindow>();
             services.AddTransient<OpenFileDialog>();
             services.AddTransient<StartViewModel>();
-            services.AddTransient<DAL>();
+            //services.AddTransient<DAL>();
             services.AddTransient<NetworkNodeDataDAL>();
-            services.AddTransient<NetworkNodeDbContext>();
-            services.AddTransient<ModelLogic>();
+            services.AddDbContext<NetworkNodeDbContext>(options => { ConfigureOptionBuilder(options); });
+            //services.AddTransient<ModelLogic>();
             services.AddTransient<ParseDbcFileLogic>();
+            //services.AddTransient<ModelManager>();
+            services.AddTransient<NetworkNodeManager>();
 
         }
 

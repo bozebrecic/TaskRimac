@@ -1,4 +1,5 @@
-﻿using RimacTask.Models;
+﻿using RimacTask.Manager;
+using RimacTask.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,10 @@ namespace RimacTask.Logic
 {
     public class ParseDbcFileLogic : ModelLogic
     {
+        public ParseDbcFileLogic(NetworkNodeManager networkNodeManager) : base(networkNodeManager)
+        {
+
+        }
         #region Public properties
 
         public NetworkNodes NetworkNode { get; set; } = new NetworkNodes();
@@ -23,6 +28,8 @@ namespace RimacTask.Logic
             LoadFile(filePath);
 
             NetworkNode = new NetworkNodes();
+
+            NetworkNode.Name = Path.GetFileNameWithoutExtension(filePath);
 
             if (!string.IsNullOrEmpty(FileContent))
             {
@@ -49,6 +56,14 @@ namespace RimacTask.Logic
                     }
                 }
             }
+            _ModelManager.CreateEntity<NetworkNodes>(NetworkNode);
+            _ModelManager.UpdateDatabase();
+
+            List<NetworkNodes> networkNodes = _ModelManager.GetAll<NetworkNodes>();
+
+            _ModelManager.DeleteEntity<NetworkNodes>(NetworkNode);
+            _ModelManager.UpdateDatabase();
+
             return NetworkNode;
         }
 
@@ -74,7 +89,7 @@ namespace RimacTask.Logic
                 string[] haux = vs[0].Split(' ');
                 if (int.TryParse(haux[1], out int id))
                 {
-                    Message.Id = id;
+                    Message.MesssageId = id;
                 }
             }
             return Message;
@@ -101,6 +116,11 @@ namespace RimacTask.Logic
 
             }
             return Signal;
+        }
+
+        public override List<NetworkNodes> GetAll()
+        {
+            return _ModelManager.GetAll<NetworkNodes>();
         }
     }
 }
