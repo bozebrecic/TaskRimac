@@ -32,7 +32,7 @@ namespace RimacTask.Manager
 
         public override List<T> GetAll<T>()
         {
-            List<NetworkNodes> networkNodes = _DAL.GetAll<NetworkNodes>();
+            List<NetworkNodes> networkNodes = _NetworkNodeDataDAL.GetAll<NetworkNodes>();
 
             return (List<T>)Convert.ChangeType(networkNodes, typeof(List<NetworkNodes>));
         }

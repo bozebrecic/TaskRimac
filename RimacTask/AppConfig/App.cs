@@ -91,9 +91,14 @@ namespace RimacTask
             services.AddTransient<NetworkNodeLogic>();
             //services.AddTransient<ModelManager>();
             services.AddTransient<NetworkNodeManager>();
+
             services.AddTransient<MessageLogic>();
             services.AddTransient<MessagesManager>();
             services.AddTransient<MessagesDataDAL>();
+
+            services.AddTransient<SignalLogic>();
+            services.AddTransient<SignalManager>();
+            services.AddTransient<SignalDataDAL>();
 
         }
 
