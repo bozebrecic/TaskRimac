@@ -39,7 +39,7 @@ namespace RimacTask.ViewModels.StartViewModelCommands
             {
                 var file = _FileDialog.FileName;
 
-                _NetworkNodeLogic.ParseDbcFile<NetworkNodes>(file);
+                _NetworkNodeLogic.ParseDbcFile(file);
 
                 _StartViewModel.UILoadingDBCFiles();
 

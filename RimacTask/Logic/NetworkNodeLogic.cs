@@ -29,7 +29,7 @@ namespace RimacTask.Logic
 
         #endregion
 
-        public override void ParseDbcFile<NetworkNodes>(string filePath)
+        public void ParseDbcFile(string filePath)
         {
             LoadFile(filePath);
 
@@ -59,7 +59,7 @@ namespace RimacTask.Logic
                     }
                 }
 
-                _NetworkNodeManager.CreateEntity((NetworkNodes)Convert.ChangeType(NetworkNode, typeof(NetworkNodes)));
+                _NetworkNodeManager.CreateEntity(NetworkNode);
                 var taskUpdateDatabase = Task.Run(() => _NetworkNodeManager.UpdateDatabaseAsync());
 
             }catch(Exception ex)
@@ -70,15 +70,9 @@ namespace RimacTask.Logic
         }
         public override List<T> GetAll<T>()
         {
-            List<NetworkNodes> networkNodes = _ModelManager.GetAll<NetworkNodes>();
+            List<NetworkNodes> networkNodes = _NetworkNodeManager.GetAll<NetworkNodes>();
 
             return (List<T>)Convert.ChangeType(networkNodes, typeof(List<NetworkNodes>));
-        }
-        public override void DeleteEntity<T>(int id)
-        {
-            NetworkNodes networkNode = _ModelManager.GetById<NetworkNodes>(id);
-            _ModelManager.DeleteEntity<NetworkNodes>(networkNode);
-            _ModelManager.UpdateDatabase();
         }
         public T GetSignal<T>(string line) where T : class
         {
@@ -143,6 +137,13 @@ namespace RimacTask.Logic
             FileContent = "";
             foreach (string line in linesInFile)
                 FileContent += line + "\r\n";
+        }
+
+        public void DeleteEntity<T>(int id) where T : class
+        {
+            NetworkNodes networkNode = _NetworkNodeManager.GetById<NetworkNodes>(id);
+            _NetworkNodeManager.DeleteEntity<NetworkNodes>(networkNode);
+            _NetworkNodeManager.UpdateDatabase();
         }
     }
 }

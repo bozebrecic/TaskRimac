@@ -12,14 +12,14 @@ namespace RimacTask.DataAccessLayer
     {
         public NetworkNodeDataDAL(NetworkNodeDbContext networkNodeDbContext) : base(networkNodeDbContext) { }
 
-        public override void CreateEntity<T>(T entity)
+        public void CreateEntity<T>(T entity) where T : class
         {
             NetworkNodes networkNode = (NetworkNodes)Convert.ChangeType(entity, typeof(NetworkNodes));
 
             _NetworkNodeDbContext.NetworkNodeData.Add(networkNode);
         }
 
-        public override void DeleteEntity<T>(T entity)
+        public void DeleteEntity<T>(T entity) where T : class
         {
             NetworkNodes networkNode = (NetworkNodes)Convert.ChangeType(entity, typeof(NetworkNodes));
 
@@ -33,13 +33,11 @@ namespace RimacTask.DataAccessLayer
             return (List<T>)Convert.ChangeType(networkNodes, typeof(List<NetworkNodes>));
         }
 
-        public override T GetById<T>(int id)
+        public T GetById<T>(int id) where T : class
         {
             NetworkNodes networkNode = _NetworkNodeDbContext.NetworkNodeData.Find(id);
 
             return (T)Convert.ChangeType(networkNode, typeof(NetworkNodes));
         }
-
-
     }
 }

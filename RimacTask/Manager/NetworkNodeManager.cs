@@ -1,4 +1,5 @@
 ﻿using RimacTask.DataAccessLayer;
+using RimacTask.Interfaces.IManagers;
 using RimacTask.Models;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,27 @@ using System.Text;
 
 namespace RimacTask.Manager
 {
-    public class NetworkNodeManager : ModelManager
+    public class NetworkNodeManager : ModelManager, INetworkNodeManager
     {
-        public NetworkNodeManager(NetworkNodeDataDAL networkNodeDataDAL) : base(networkNodeDataDAL) { }
-        public override void CreateEntity<T>(T entity)
+        public NetworkNodeManager(NetworkNodeDataDAL networkNodeDataDAL) : base(networkNodeDataDAL) 
         {
-            NetworkNodes networkNode = (NetworkNodes)Convert.ChangeType(entity, typeof(NetworkNodes));
-
-            _DAL.CreateEntity(networkNode);
+            _NetworkNodeDataDAL = networkNodeDataDAL;
         }
 
-        public override void DeleteEntity<T>(T entity)
+        private NetworkNodeDataDAL _NetworkNodeDataDAL;
+
+        public void CreateEntity<T>(T entity) where T : class
         {
             NetworkNodes networkNode = (NetworkNodes)Convert.ChangeType(entity, typeof(NetworkNodes));
 
-            _DAL.DeleteEntity<NetworkNodes>(networkNode);
+            _NetworkNodeDataDAL.CreateEntity(networkNode);
+        }
+
+        public void DeleteEntity<T>(T entity) where T : class
+        {
+            NetworkNodes networkNode = (NetworkNodes)Convert.ChangeType(entity, typeof(NetworkNodes));
+
+            _NetworkNodeDataDAL.DeleteEntity<NetworkNodes>(networkNode);
         }
 
         public override List<T> GetAll<T>()
@@ -30,9 +37,9 @@ namespace RimacTask.Manager
             return (List<T>)Convert.ChangeType(networkNodes, typeof(List<NetworkNodes>));
         }
 
-        public override T GetById<T>(int id)
+        public T GetById<T>(int id) where T : class
         {
-            NetworkNodes networkNode = _DAL.GetById<NetworkNodes>(id);
+            NetworkNodes networkNode = _NetworkNodeDataDAL.GetById<NetworkNodes>(id);
 
             return (T)Convert.ChangeType(networkNode, typeof(NetworkNodes));
         }

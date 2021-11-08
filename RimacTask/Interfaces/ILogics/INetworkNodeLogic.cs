@@ -9,5 +9,7 @@ namespace RimacTask.Interfaces.ILogics
         public abstract T GetSignal<T>(string line) where T : class;
         public abstract T GetMessage<T>(string line) where T : class;
         public abstract void LoadFile(string filePath);
+        public abstract void DeleteEntity<T>(int id) where T : class;
+        public abstract void ParseDbcFile(string filePath);
     }
 }

@@ -19,6 +19,7 @@ namespace RimacTask.ViewModels
             _LoadDbcFileCommand = new LoadDbcFileCommand(this);
             _DeleteDBCFIleCommand = new DeleteDBCFileCommand(this);
             _NetworkNodeLogic = App._ServiceProvider.GetRequiredService<NetworkNodeLogic>();
+            _MessageLogic = App._ServiceProvider.GetRequiredService<MessageLogic>();
             UILoadingDBCFiles();
         }
 
@@ -28,6 +29,7 @@ namespace RimacTask.ViewModels
         private ICommand _DeleteDBCFIleCommand;
         private NetworkNodeLogic _NetworkNodeLogic;
         private NetworkNodes _SelectedDBCFile;
+        private MessageLogic _MessageLogic;
         private ObservableCollection<NetworkNodes> _DBCFiles;
         private string _AllRecords;
 
@@ -70,7 +72,7 @@ namespace RimacTask.ViewModels
         public void UILoadingDBCFiles()
         {
             List<NetworkNodes> dbcFiles = _NetworkNodeLogic.GetAll<NetworkNodes>();
-            //List<Messages> messages = _NetworkNodeLogic.GetAll<Messages>();
+            List<Messages> messages = _MessageLogic.GetAll<Messages>();
             //List<Signals> signals = _NetworkNodeLogic.GetAll<Signals>();
 
             _DBCFiles = new ObservableCollection<NetworkNodes>();

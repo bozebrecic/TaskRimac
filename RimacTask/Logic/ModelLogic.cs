@@ -17,9 +17,7 @@ namespace RimacTask.Logic
         protected ModelManager _ModelManager { get; set; }
 
         #region Abstract methods
-        public abstract void ParseDbcFile<T>(string filePath) where T : class;
         public abstract List<T> GetAll<T>() where T : class;
-        public abstract void DeleteEntity<T>(int id) where T : class;
 
         #endregion
     }
