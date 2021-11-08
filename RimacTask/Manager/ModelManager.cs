@@ -17,6 +17,8 @@ namespace RimacTask.Manager
 
         public int UpdateDatabase() => _DAL.UpdateDatabase();
 
+        public Task<int> UpdateDatabaseAsync() => _DAL.UpdateDatabaseAsnc();
+
         public List<T> GetAll<T>() where T : class => _DAL.GetAll<T>();
 
         #region Abstract methods

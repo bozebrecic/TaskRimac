@@ -12,49 +12,78 @@ using System.Windows.Input;
 
 namespace RimacTask.ViewModels
 {
-    public class StartViewModel
+    public class StartViewModel : INotifyPropertyChanged
     {
         public StartViewModel()
         {
             _LoadDbcFileCommand = new LoadDbcFileCommand(this);
-            _ParseDbcFileLogic = App._ServiceProvider.GetRequiredService<ParseDbcFileLogic>();
-            LoadDBCFiles();
+            _DeleteDBCFIleCommand = new DeleteDBCFileCommand(this);
+            _NetworkNodeLogic = App._ServiceProvider.GetRequiredService<NetworkNodeLogic>();
+            UILoadingDBCFiles();
         }
 
         #region Private fields
 
         private ICommand _LoadDbcFileCommand;
-        private ParseDbcFileLogic _ParseDbcFileLogic;
+        private ICommand _DeleteDBCFIleCommand;
+        private NetworkNodeLogic _NetworkNodeLogic;
         private NetworkNodes _SelectedDBCFile;
+        private ObservableCollection<NetworkNodes> _DBCFiles;
+        private string _AllRecords;
+
         #endregion
 
-        #region Icommand
+        #region ICommand
+
         public ICommand LoadDbcFileCommand
         {
             get { return _LoadDbcFileCommand; }
             set { _LoadDbcFileCommand = value; }
         }
+        public ICommand DeleteDBCFileCommand
+        {
+            get { return _DeleteDBCFIleCommand; }
+            set { _DeleteDBCFIleCommand = value; }
+        }
+
         #endregion
 
-        public ObservableCollection<NetworkNodes> DBCFiles { get; set; }
-
-        public NetworkNodes SelectedDBCFile 
-        { 
-            get { return _SelectedDBCFile; } 
-            set 
-            {
-                _SelectedDBCFile = value;
-                OnPropertyChanged("SelectedDBCFile"); 
-            } 
-        }
-        private void LoadDBCFiles()
+        #region Public properties
+        public ObservableCollection<NetworkNodes> DBCFiles 
         {
-            List<NetworkNodes> dbcFiles = _ParseDbcFileLogic.GetAll();
-            DBCFiles = new ObservableCollection<NetworkNodes>();
-            //_StartWindow.LoadedDBCFiles.Items.Clear();
+            get { return _DBCFiles; }
+            set { _DBCFiles = value; OnPropertyChanged("DBCFiles"); }
+        }
+        public NetworkNodes SelectedDBCFile 
+        {
+            get { return _SelectedDBCFile; }
+            set { _SelectedDBCFile = value; OnPropertyChanged("SelectedDBCFile");}
+        }
+        public string AllRecords 
+        { 
+            get { return _AllRecords; }
+            set { _AllRecords = value; OnPropertyChanged("AllRecords"); }
+        }
+
+        #endregion
+
+        public void UILoadingDBCFiles()
+        {
+            List<NetworkNodes> dbcFiles = _NetworkNodeLogic.GetAll<NetworkNodes>();
+            List<Messages> messages = _NetworkNodeLogic.GetAll<Messages>();
+            List<Signals> signals = _NetworkNodeLogic.GetAll<Signals>();
+
+            _DBCFiles = new ObservableCollection<NetworkNodes>();
+            _AllRecords = "";
 
             foreach (NetworkNodes networkNode in dbcFiles)
-                DBCFiles.Add(new NetworkNodes() { Id= networkNode.Id,Name =networkNode.Name});
+            {
+                _DBCFiles.Add(new NetworkNodes() { Id = networkNode.Id, Name = networkNode.Name });
+                _AllRecords += networkNode.ToString();
+            }
+
+            OnPropertyChanged("DBCFiles");
+            OnPropertyChanged("AllRecords");
         }
 
         #region INotifyPropertyChanged Members

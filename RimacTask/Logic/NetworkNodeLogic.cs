@@ -8,12 +8,15 @@ using System.Text;
 
 namespace RimacTask.Logic
 {
-    public class ParseDbcFileLogic : ModelLogic
+    public class NetworkNodeLogic : ModelLogic
     {
-        public ParseDbcFileLogic(NetworkNodeManager networkNodeManager) : base(networkNodeManager)
+        public NetworkNodeLogic(NetworkNodeManager networkNodeManager) : base(networkNodeManager)
         {
-
+            _NetworkNodeManager = networkNodeManager;
         }
+
+        private NetworkNodeManager _NetworkNodeManager;
+
         #region Public properties
 
         public NetworkNodes NetworkNode { get; set; } = new NetworkNodes();
@@ -23,11 +26,9 @@ namespace RimacTask.Logic
 
         #endregion
 
-        public override NetworkNodes ParseDbcFile(string filePath)
+        public override NetworkNodes ParseDbcFile<NetworkNodes>(string filePath)
         {
             LoadFile(filePath);
-
-            NetworkNode = new NetworkNodes();
 
             NetworkNode.Name = Path.GetFileNameWithoutExtension(filePath);
 
@@ -56,15 +57,10 @@ namespace RimacTask.Logic
                     }
                 }
             }
-            _ModelManager.CreateEntity<NetworkNodes>(NetworkNode);
-            _ModelManager.UpdateDatabase();
+            _NetworkNodeManager.CreateEntity((NetworkNodes)Convert.ChangeType(NetworkNode, typeof(NetworkNodes)));
+            _NetworkNodeManager.UpdateDatabaseAsync();
 
-            List<NetworkNodes> networkNodes = _ModelManager.GetAll<NetworkNodes>();
-
-            _ModelManager.DeleteEntity<NetworkNodes>(NetworkNode);
-            _ModelManager.UpdateDatabase();
-
-            return NetworkNode;
+            return (NetworkNodes)Convert.ChangeType(NetworkNode, typeof(NetworkNodes));
         }
 
         private void LoadFile(string filePath)
@@ -118,9 +114,16 @@ namespace RimacTask.Logic
             return Signal;
         }
 
-        public override List<NetworkNodes> GetAll()
+        public override List<NetworkNodes> GetAll<NetworkNodes>()
         {
             return _ModelManager.GetAll<NetworkNodes>();
+        }
+
+        public override void DeleteEntity<T>(int id)
+        {
+            NetworkNodes networkNode = _ModelManager.GetById<NetworkNodes>(id);
+            _ModelManager.DeleteEntity<NetworkNodes>(networkNode);
+            _ModelManager.UpdateDatabase();
         }
     }
 }

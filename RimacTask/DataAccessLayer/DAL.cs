@@ -23,6 +23,12 @@ namespace RimacTask.DataAccessLayer
         public int UpdateDatabase() => _NetworkNodeDbContext.SaveChanges();
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<int> UpdateDatabaseAsnc() => _NetworkNodeDbContext.SaveChangesAsync();
+
+        /// <summary>
         /// Delete entity from database
         /// </summary>
         /// <typeparam name="T"></typeparam>

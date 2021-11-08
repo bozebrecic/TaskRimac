@@ -17,8 +17,10 @@ namespace RimacTask.Logic
 
         //public abstract void SaveToDatabase();
 
-        public abstract NetworkNodes ParseDbcFile(string filePath);
+        public abstract T ParseDbcFile<T>(string filePath) where T : class;
 
-        public abstract List<NetworkNodes> GetAll();
+        public abstract List<T> GetAll<T>() where T : class;
+
+        public abstract void DeleteEntity<T>(int id) where T : class;
     }
 }

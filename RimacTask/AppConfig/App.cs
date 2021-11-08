@@ -88,7 +88,7 @@ namespace RimacTask
             services.AddTransient<NetworkNodeDataDAL>();
             services.AddDbContext<NetworkNodeDbContext>(options => { ConfigureOptionBuilder(options); });
             //services.AddTransient<ModelLogic>();
-            services.AddTransient<ParseDbcFileLogic>();
+            services.AddTransient<NetworkNodeLogic>();
             //services.AddTransient<ModelManager>();
             services.AddTransient<NetworkNodeManager>();
 

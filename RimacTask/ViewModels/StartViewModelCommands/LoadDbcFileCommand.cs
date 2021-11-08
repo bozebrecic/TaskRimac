@@ -15,19 +15,16 @@ namespace RimacTask.ViewModels.StartViewModelCommands
     {
         public LoadDbcFileCommand(StartViewModel startViewModel)
         {
-            _ParseDbcFileLogic = App._ServiceProvider.GetRequiredService<ParseDbcFileLogic>();
+            _NetworkNodeLogic = App._ServiceProvider.GetRequiredService<NetworkNodeLogic>();
             _FileDialog = App._ServiceProvider.GetRequiredService<OpenFileDialog>();
             _StartViewModel = startViewModel;
-            LoadFiles();
-            //_StartWindow = App._ServiceProvider.GetRequiredService<StartWindow>();
         }
 
         #region Private fields
 
         private OpenFileDialog _FileDialog;
-        private ParseDbcFileLogic _ParseDbcFileLogic;
+        private NetworkNodeLogic _NetworkNodeLogic;
         private StartViewModel _StartViewModel;
-        //private StartWindow _StartWindow;
         #endregion
         public event EventHandler CanExecuteChanged;
 
@@ -43,16 +40,12 @@ namespace RimacTask.ViewModels.StartViewModelCommands
             {
                 var file = _FileDialog.FileName;
                 NetworkNodes nn = new NetworkNodes();
-                nn = _ParseDbcFileLogic.ParseDbcFile(file);
+                nn = _NetworkNodeLogic.ParseDbcFile<NetworkNodes>(file);
                 MessageBox.Show(file);
+                _StartViewModel.LoadDBCFiles();
             }
             else
                 MessageBox.Show("Could not find a file");
-        }
-
-        private void LoadFiles()
-        {
-            List<NetworkNodes> networkNodes = _ParseDbcFileLogic.GetAll();
         }
     }
 }

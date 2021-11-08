@@ -8,7 +8,7 @@
         Title="StartWindow" Height="450" Width="800">
     <Grid>
         <Button Content="Load DBC file" Command="{Binding LoadDbcFileCommand}" HorizontalAlignment="Left" Margin="60,63,0,0" VerticalAlignment="Top" Height="37" Width="85"/>
-        <Button Content="Delete records" HorizontalAlignment="Left" Margin="60,109,0,0" VerticalAlignment="Top" Height="37" Width="85" RenderTransformOrigin="0.237,2.318"/>
+        <Button Content="Delete records" Command="{Binding DeleteDBCFileCommand}" HorizontalAlignment="Left" Margin="60,109,0,0" VerticalAlignment="Top" Height="37" Width="85" RenderTransformOrigin="0.237,2.318"/>
         <ListBox Name="LoadedDBCFiles" ItemsSource="{Binding DBCFiles}" SelectedItem ="{Binding SelectedDBCFile}"  HorizontalAlignment="Left" Height="142" Margin="201,63,0,0" VerticalAlignment="Top" Width="167">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -19,6 +19,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <TextBox Text="{Binding Path=AllRecords , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="280" Margin="400,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375"/>
 
     </Grid>
 </Window>
