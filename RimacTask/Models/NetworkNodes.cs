@@ -1,4 +1,4 @@
-﻿using RimacTask.Interfaces;
+﻿using RimacTask.Interfaces.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

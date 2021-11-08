@@ -35,14 +35,15 @@ namespace RimacTask.ViewModels.StartViewModelCommands
 
         public void Execute(object parameter)
         {
-            //_StartWindow.LoadedDBCFiles.Items.Add("test");
             if (_FileDialog.ShowDialog() == true)
             {
                 var file = _FileDialog.FileName;
-                NetworkNodes nn = new NetworkNodes();
-                nn = _NetworkNodeLogic.ParseDbcFile<NetworkNodes>(file);
-                MessageBox.Show(file);
-                _StartViewModel.LoadDBCFiles();
+
+                _NetworkNodeLogic.ParseDbcFile<NetworkNodes>(file);
+
+                _StartViewModel.UILoadingDBCFiles();
+
+                MessageBox.Show($"Successfully added data from file [{file}]");
             }
             else
                 MessageBox.Show("Could not find a file");

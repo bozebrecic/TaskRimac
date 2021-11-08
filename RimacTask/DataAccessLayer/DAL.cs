@@ -1,4 +1,5 @@
 ﻿using RimacTask.DbContexts;
+using RimacTask.Interfaces.IDALs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RimacTask.DataAccessLayer
 {
-    public abstract class DAL
+    public abstract class DAL : IDAL
     {
         public DAL(NetworkNodeDbContext networkNodeDbContext)
         {
@@ -16,37 +17,20 @@ namespace RimacTask.DataAccessLayer
 
         protected NetworkNodeDbContext _NetworkNodeDbContext { get; set; }
 
-        /// <summary>
-        /// Method just call DbContext.SaveChanges()
-        /// </summary>
-        /// <returns></returns>
         public int UpdateDatabase() => _NetworkNodeDbContext.SaveChanges();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<int> UpdateDatabaseAsnc() => _NetworkNodeDbContext.SaveChangesAsync();
+        public Task<int> UpdateDatabaseAsync() => _NetworkNodeDbContext.SaveChangesAsync();
 
-        /// <summary>
-        /// Delete entity from database
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
-        public void DeleteEntity<T>(T entity) where T : class => _NetworkNodeDbContext.Remove<T>(entity);
-
-        /// <summary>
-        /// Get all records
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public List<T> GetAll<T>() where T : class => _NetworkNodeDbContext.Set<T>().ToList();
 
         #region Abtsract methods
 
         public abstract void CreateEntity<T>(T entity) where T : class;
 
         public abstract T GetById<T>(int id) where T : class;
+
+        public abstract void DeleteEntity<T>(T entity) where T : class;
+
+        public abstract List<T> GetAll<T>() where T : class; 
 
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using RimacTask.DataAccessLayer;
+using RimacTask.Interfaces.IManagers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RimacTask.Manager
 {
-    public abstract class ModelManager
+    public abstract class ModelManager : IModelManager
     {
         public ModelManager(DAL dataAccessLayer)
         {
@@ -17,9 +18,9 @@ namespace RimacTask.Manager
 
         public int UpdateDatabase() => _DAL.UpdateDatabase();
 
-        public Task<int> UpdateDatabaseAsync() => _DAL.UpdateDatabaseAsnc();
+        public Task<int> UpdateDatabaseAsync() => _DAL.UpdateDatabaseAsync();
 
-        public List<T> GetAll<T>() where T : class => _DAL.GetAll<T>();
+
 
         #region Abstract methods
 
@@ -28,6 +29,8 @@ namespace RimacTask.Manager
         public abstract T GetById<T>(int id) where T : class;
 
         public abstract void DeleteEntity<T>(T entity) where T : class;
+
+        public abstract List<T> GetAll<T>() where T : class;
 
         #endregion
     }

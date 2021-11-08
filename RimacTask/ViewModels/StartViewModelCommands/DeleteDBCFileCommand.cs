@@ -29,7 +29,7 @@ namespace RimacTask.ViewModels.StartViewModelCommands
         public void Execute(object parameter)
         {
             _NetworkNodeLogic.DeleteEntity<NetworkNodes>(_StartViewModel.SelectedDBCFile.Id);
-            _StartViewModel.LoadDBCFiles();
+            _StartViewModel.UILoadingDBCFiles();
         }
     }
 }

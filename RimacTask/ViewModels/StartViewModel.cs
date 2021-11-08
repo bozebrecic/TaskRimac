@@ -70,8 +70,8 @@ namespace RimacTask.ViewModels
         public void UILoadingDBCFiles()
         {
             List<NetworkNodes> dbcFiles = _NetworkNodeLogic.GetAll<NetworkNodes>();
-            List<Messages> messages = _NetworkNodeLogic.GetAll<Messages>();
-            List<Signals> signals = _NetworkNodeLogic.GetAll<Signals>();
+            //List<Messages> messages = _NetworkNodeLogic.GetAll<Messages>();
+            //List<Signals> signals = _NetworkNodeLogic.GetAll<Signals>();
 
             _DBCFiles = new ObservableCollection<NetworkNodes>();
             _AllRecords = "";

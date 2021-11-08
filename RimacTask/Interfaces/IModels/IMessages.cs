@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RimacTask.Interfaces
+namespace RimacTask.Interfaces.IModels
 {
     public interface IMessages
     {
