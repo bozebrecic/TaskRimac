@@ -13,13 +13,14 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                        <TextBlock Text="{Binding Id}" Margin="2" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Name}" Margin="2" />
+                        <TextBlock Text="{Binding Name}" Margin="2" FontWeight="Bold"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <TextBox Text="{Binding Path=AllRecords , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="280" Margin="400,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="375"/>
+        <Label Content="Loaded DBC file in database" HorizontalAlignment="Left" Margin="201,36,0,0" VerticalAlignment="Top" Width="163"/>
+        <Label Content="All records" HorizontalAlignment="Left" Margin="400,36,0,0" VerticalAlignment="Top" Width="71"/>
 
     </Grid>
 </Window>

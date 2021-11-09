@@ -11,5 +11,6 @@ namespace RimacTask.Interfaces.ILogics
         public abstract void LoadFile(string filePath);
         public abstract void DeleteEntity<T>(int id) where T : class;
         public abstract void ParseDbcFile(string filePath);
+        public abstract void UpdateDatabase();
     }
 }

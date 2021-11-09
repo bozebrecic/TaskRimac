@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -29,51 +30,65 @@ namespace RimacTask.Logic
 
         #endregion
 
+        /// <summary>
+        /// Parse all messages and correspondig signals from dbc file (network node).
+        /// DBC message & signal syntax.
+        /// https://www.csselectronics.com/pages/can-dbc-file-database-intro 
+        /// </summary>
+        /// <param name="filePath"></param>
         public void ParseDbcFile(string filePath)
         {
             LoadFile(filePath);
 
             NetworkNode.Name = Path.GetFileNameWithoutExtension(filePath);
 
-            try
+            if (!string.IsNullOrEmpty(FileContent))
             {
-                if (!string.IsNullOrEmpty(FileContent))
-                {
-                    string[] lines = FileContent.Replace("\r", "").Split('\n');
+                string[] lines = FileContent.Replace("\r", "").Split('\n');
 
-                    foreach (string line in lines)
+                foreach (string line in lines)
+                {
+                    if (!String.IsNullOrWhiteSpace(line.Trim()))
                     {
-                        if (!String.IsNullOrWhiteSpace(line.Trim()))
+                        //if line in record starts with message remark "BO_ " its message type
+                        if (line.Trim().StartsWith(Messages.Remark))
                         {
-                            if (line.Trim().StartsWith(Messages.Remark))
-                            {
-                                //Message
-                                NetworkNode.Messages.Add(GetMessage<Messages>(line));
-                            }
-                            else if (line.Trim().StartsWith(Signals.Remark))
-                            {
-                                //Signal
-                                NetworkNode.Messages.LastOrDefault().Signals.Add(GetSignal<Signals>(line));
-                            }
+                            //Message
+                            NetworkNode.Messages.Add(GetMessage<Messages>(line));
+                        }
+                        //if line in record starts with signal remark "SG_ " its message type
+                        else if (line.Trim().StartsWith(Signals.Remark))
+                        {
+                            //Signal add to last added message in network node (message has corresponding signals
+                            NetworkNode.Messages.LastOrDefault().Signals.Add(GetSignal<Signals>(line));
                         }
                     }
                 }
-
-                _NetworkNodeManager.CreateEntity(NetworkNode);
-                var taskUpdateDatabase = Task.Run(() => _NetworkNodeManager.UpdateDatabaseAsync());
-
-            }catch(Exception ex)
-            {
-                MessageBox.Show($"Failed to parse DBC file! [Error]: {ex.Message}!");
             }
 
+            _NetworkNodeManager.CreateEntity(NetworkNode);
+             UpdateDatabase();
+
         }
+
+        /// <summary>
+        /// Get list of records of specific type from database.
+        /// </summary>
+        /// <typeparam name="T">Type of entity</typeparam>
+        /// <returns></returns>
         public override List<T> GetAll<T>()
         {
             List<NetworkNodes> networkNodes = _NetworkNodeManager.GetAll<NetworkNodes>();
 
             return (List<T>)Convert.ChangeType(networkNodes, typeof(List<NetworkNodes>));
         }
+
+        /// <summary>
+        /// Parse record line with signal syntax to get signal name, bit start and length.
+        /// </summary>
+        /// <typeparam name="T">Type of signal</typeparam>
+        /// <param name="line">Line from dbc file.</param>
+        /// <returns></returns>
         public T GetSignal<T>(string line) where T : class
         {
             Signal = new Signals();
@@ -104,6 +119,13 @@ namespace RimacTask.Logic
 
             return (T)Convert.ChangeType(Signal, typeof(Signals));
         }
+
+        /// <summary>
+        /// Parse record line with message syntax to get message id and message name.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="line">Line from dbc file.</param>
+        /// <returns></returns>
         public T GetMessage<T>(string line) where T : class
         {
             Message = new Messages();
@@ -130,6 +152,11 @@ namespace RimacTask.Logic
 
             return (T)Convert.ChangeType(Message, typeof(Messages));
         }
+
+        /// <summary>
+        /// Read file data line by line.
+        /// </summary>
+        /// <param name="filePath"></param>
         public void LoadFile(string filePath)
         {
             string[] linesInFile = File.ReadAllLines(filePath);
@@ -139,10 +166,23 @@ namespace RimacTask.Logic
                 FileContent += line + "\r\n";
         }
 
+        /// <summary>
+        /// Delete entity from database with given Id of entity.
+        /// </summary>
+        /// <typeparam name="T">Type of entity</typeparam>
+        /// <param name="id">Id of network node</param>
         public void DeleteEntity<T>(int id) where T : class
         {
             NetworkNodes networkNode = _NetworkNodeManager.GetById<NetworkNodes>(id);
             _NetworkNodeManager.DeleteEntity<NetworkNodes>(networkNode);
+            UpdateDatabase();
+        }
+
+        /// <summary>
+        /// Update database.
+        /// </summary>
+        public void UpdateDatabase()
+        {
             _NetworkNodeManager.UpdateDatabase();
         }
     }

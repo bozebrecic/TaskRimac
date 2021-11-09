@@ -22,7 +22,7 @@ namespace RimacTask.ViewModels
             _MessageLogic = App._ServiceProvider.GetRequiredService<MessageLogic>();
             _SignalLogic = App._ServiceProvider.GetRequiredService<SignalLogic>();
 
-            UILoadingDBCFiles();
+            UILoadDBCFiles();
         }
 
         #region Private fields
@@ -72,7 +72,10 @@ namespace RimacTask.ViewModels
 
         #endregion
 
-        public void UILoadingDBCFiles()
+        /// <summary>
+        /// Display records from database on UI.
+        /// </summary>
+        public void UILoadDBCFiles()
         {
             List<NetworkNodes> dbcFiles = _NetworkNodeLogic.GetAll<NetworkNodes>();
             List<Messages> messages = _MessageLogic.GetAll<Messages>();

@@ -41,7 +41,7 @@ namespace RimacTask.ViewModels.StartViewModelCommands
 
                 _NetworkNodeLogic.ParseDbcFile(file);
 
-                _StartViewModel.UILoadingDBCFiles();
+                _StartViewModel.UILoadDBCFiles();
 
                 MessageBox.Show($"Successfully added data from file [{file}]");
             }
