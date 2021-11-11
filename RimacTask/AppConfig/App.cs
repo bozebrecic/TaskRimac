@@ -84,12 +84,11 @@ namespace RimacTask
             services.AddTransient<StartWindow>();
             services.AddTransient<OpenFileDialog>();
             services.AddTransient<StartViewModel>();
-            //services.AddTransient<DAL>();
+
             services.AddTransient<NetworkNodeDataDAL>();
             services.AddDbContext<NetworkNodeDbContext>(options => { ConfigureOptionBuilder(options); });
-            //services.AddTransient<ModelLogic>();
+
             services.AddTransient<NetworkNodeLogic>();
-            //services.AddTransient<ModelManager>();
             services.AddTransient<NetworkNodeManager>();
 
             services.AddTransient<MessageLogic>();
