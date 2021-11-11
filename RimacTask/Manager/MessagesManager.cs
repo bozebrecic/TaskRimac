@@ -19,7 +19,7 @@ namespace RimacTask.Manager
 
         public override List<T> GetAll<T>()
         {
-            List<Messages> messages = _DAL.GetAll<Messages>();
+            List<Messages> messages = _MessagesDataDAL.GetAll<Messages>();
 
             return (List<T>)Convert.ChangeType(messages, typeof(List<Messages>));
         }

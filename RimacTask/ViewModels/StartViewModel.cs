@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RimacTask.Logic;
+using RimacTask.Manager;
 using RimacTask.Models;
 using RimacTask.ViewModels.StartViewModelCommands;
 using RimacTask.Views;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace RimacTask.ViewModels
@@ -18,9 +20,9 @@ namespace RimacTask.ViewModels
         {
             _LoadDbcFileCommand = new LoadDbcFileCommand(this);
             _DeleteDBCFIleCommand = new DeleteDBCFileCommand(this);
-            _NetworkNodeLogic = App._ServiceProvider.GetRequiredService<NetworkNodeLogic>();
-            _MessageLogic = App._ServiceProvider.GetRequiredService<MessageLogic>();
-            _SignalLogic = App._ServiceProvider.GetRequiredService<SignalLogic>();
+            _NetworkNodeManager = App._ServiceProvider.GetRequiredService<NetworkNodeManager>();
+            _MessageManager = App._ServiceProvider.GetRequiredService<MessagesManager>();
+            _SignalManager = App._ServiceProvider.GetRequiredService<SignalManager>();
 
             UILoadDBCFiles();
         }
@@ -29,10 +31,10 @@ namespace RimacTask.ViewModels
 
         private ICommand _LoadDbcFileCommand;
         private ICommand _DeleteDBCFIleCommand;
-        private NetworkNodeLogic _NetworkNodeLogic;
+        private NetworkNodeManager _NetworkNodeManager;
         private NetworkNodes _SelectedDBCFile;
-        private MessageLogic _MessageLogic;
-        private SignalLogic _SignalLogic;
+        private MessagesManager _MessageManager;
+        private SignalManager _SignalManager;
         private ObservableCollection<NetworkNodes> _DBCFiles;
         private string _AllRecords;
 
@@ -75,11 +77,13 @@ namespace RimacTask.ViewModels
         /// <summary>
         /// Display records from database on UI.
         /// </summary>
-        public void UILoadDBCFiles()
+        public async Task UILoadDBCFiles()
         {
-            List<NetworkNodes> dbcFiles = _NetworkNodeLogic.GetAll<NetworkNodes>();
-            List<Messages> messages = _MessageLogic.GetAll<Messages>();
-            List<Signals> signals = _SignalLogic.GetAll<Signals>();
+            Task.WaitAll();
+
+            List<NetworkNodes> dbcFiles = _NetworkNodeManager.GetAll<NetworkNodes>();
+            List<Messages> messages = _MessageManager.GetAll<Messages>();
+            List<Signals> signals = _SignalManager.GetAll<Signals>();
 
             _DBCFiles = new ObservableCollection<NetworkNodes>();
             _AllRecords = "";

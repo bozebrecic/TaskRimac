@@ -9,16 +9,10 @@ namespace RimacTask.Logic
 {
     public abstract class ModelLogic : IModelLogic
     {
-        public ModelLogic(ModelManager modelManager)
+        public ModelLogic()
         {
-            _ModelManager = modelManager;
+
         }
 
-        protected ModelManager _ModelManager { get; set; }
-
-        #region Abstract methods
-        public abstract List<T> GetAll<T>() where T : class;
-
-        #endregion
     }
 }

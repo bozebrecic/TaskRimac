@@ -16,6 +16,7 @@ namespace RimacTask.Manager
         }
 
         private SignalDataDAL _SignalDataDAL;
+
         public override List<T> GetAll<T>()
         {
             List<Signals> signals = _SignalDataDAL.GetAll<Signals>();
