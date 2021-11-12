@@ -80,6 +80,10 @@ namespace RimacTask.Logic
                     MessageBox.Show($"Problem with parsing DBC file! Error: [{ex.Message}]");
                 }
             }
+            if(NetworkNode.Messages.Count == 0)
+            {
+                throw new Exception("No valid records!");
+            }
             return (T)Convert.ChangeType(NetworkNode, typeof(NetworkNodes));
 
         }
